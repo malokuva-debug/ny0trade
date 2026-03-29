@@ -1,5 +1,4 @@
 import { createClient } from '@supabase/supabase-js';
-import type { Database } from '@/types/database';
 
 // Environment variables
 const supabaseUrl = process.env.SUPABASE_URL || '';
@@ -10,7 +9,7 @@ if (!supabaseUrl || !supabaseKey) {
 }
 
 // Create Supabase client with service role key for backend operations
-export const supabase = createClient<Database>(supabaseUrl, supabaseKey, {
+export const supabase = createClient(supabaseUrl, supabaseKey, {
   auth: {
     autoRefreshToken: false,
     persistSession: false,
