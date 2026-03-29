@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 15, 23, 42;
+  --background-end-rgb: 30, 41, 59;
+}
+
+* { box-sizing: border-box; padding: 0; margin: 0; }
+
+html, body { max-width: 100vw; overflow-x: hidden; }
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+a { color: inherit; text-decoration: none; }
+
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: rgba(30, 41, 59, 0.5); }
+::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.5); border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(148, 163, 184, 0.7); }
+
+.rarity-consumer   { background: linear-gradient(135deg, #B0C3D9 0%, #8B9BB0 100%); }
+.rarity-industrial { background: linear-gradient(135deg, #5E98D9 0%, #4A7FB0 100%); }
+.rarity-milspec    { background: linear-gradient(135deg, #4B69FF 0%, #3A52CC 100%); }
+.rarity-restricted { background: linear-gradient(135deg, #8847FF 0%, #6B38CC 100%); }
+.rarity-classified { background: linear-gradient(135deg, #D32CE6 0%, #A922B8 100%); }
+.rarity-covert     { background: linear-gradient(135deg, #EB4B4B 0%, #BC3C3C 100%); }
+
+.card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3), 0 10px 10px -5px rgba(0,0,0,0.2); }
+
+.profit-positive { color: #4ade80; }
+.profit-negative { color: #f87171; }
+
+@keyframes shimmer {
+  0%   { background-position: -1000px 0; }
+  100% { background-position:  1000px 0; }
+}
+.skeleton {
+  animation: shimmer 2s infinite linear;
+  background: linear-gradient(to right, #1e293b 0%, #334155 50%, #1e293b 100%);
+  background-size: 2000px 100%;
+}
+
+.btn { @apply px-4 py-2 rounded-lg font-medium transition-all duration-200; }
+.btn-primary   { @apply bg-blue-600 hover:bg-blue-700 text-white; }
+.btn-success   { @apply bg-green-600 hover:bg-green-700 text-white; }
+.btn-danger    { @apply bg-red-600 hover:bg-red-700 text-white; }
+.btn-secondary { @apply bg-slate-700 hover:bg-slate-600 text-white; }
+
+.badge         { @apply px-3 py-1 rounded-full text-sm font-semibold; }
+.badge-success { @apply bg-green-500/20 text-green-400 border border-green-500/30; }
+.badge-warning { @apply bg-yellow-500/20 text-yellow-400 border border-yellow-500/30; }
+.badge-danger  { @apply bg-red-500/20 text-red-400 border border-red-500/30; }
+.badge-info    { @apply bg-blue-500/20 text-blue-400 border border-blue-500/30; }
+
+.glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(148, 163, 184, 0.1); }
+.glow         { box-shadow: 0 0 20px rgba(74, 144, 226, 0.3); }
+.glow-success { box-shadow: 0 0 20px rgba(74, 222, 128, 0.3); }
+.glow-danger  { box-shadow: 0 0 20px rgba(248, 113, 113, 0.3); }
