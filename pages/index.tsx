@@ -48,10 +48,10 @@ function TradeUpCard({ trade, onVote }: { trade: TradeUpContract; onVote: (id: s
 
       {/* Stats row */}
       <div className="flex flex-wrap gap-2">
-        <StatBadge label="Cost"   value={`$${trade.total_cost.toFixed(2)}`} />
-        <StatBadge label="EV"     value={`$${trade.expected_value.toFixed(2)}`} />
-        <StatBadge label="Profit" value={`${isProfit ? '+' : ''}$${trade.profit.toFixed(2)}`} positive={isProfit ? true : false} />
-        <StatBadge label="Float"  value={trade.avg_input_float.toFixed(4)} />
+<StatBadge label="Cost" value={`$${(trade.total_cost ?? 0).toFixed(2)}`} />
+<StatBadge label="EV" value={`$${(trade.expected_value ?? 0).toFixed(2)}`} />
+<StatBadge label="Profit" value={`${isProfit ? '+' : ''}$${(trade.profit ?? 0).toFixed(2)}`} positive={isProfit ? true : false} />
+<StatBadge label="Float" value={(trade.avg_input_float ?? 0).toFixed(4)} />
       </div>
 
       {/* Inputs summary */}
@@ -74,8 +74,8 @@ function TradeUpCard({ trade, onVote }: { trade: TradeUpContract; onVote: (id: s
               <span className="text-slate-300 truncate max-w-[180px]">{out.market_hash_name}</span>
               <div className="flex gap-2 shrink-0 ml-2">
                 <span className="text-slate-400">{(out.probability * 100).toFixed(0)}%</span>
-                <span className="text-green-400">${out.price.toFixed(2)}</span>
-              </div>
+                <span className="text-green-400">${(out.price ?? 0).toFixed(2)}</span>
+</div>
             </div>
           ))}
         </div>
@@ -115,11 +115,11 @@ function SniperCard({ alert }: { alert: SniperAlert }) {
       <div className="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center text-xl shrink-0">🎯</div>
       <div className="flex-1 min-w-0">
         <p className="text-sm font-semibold text-white truncate">{alert.skin.market_hash_name}</p>
-        <p className="text-xs text-slate-400">Float {alert.float_value.toFixed(4)} · Market ${alert.market_price.toFixed(2)}</p>
+        <p className="text-xs text-slate-400">Float {(alert.float_value ?? 0).toFixed(4)} · Market ${(alert.market_price ?? 0).toFixed(2)}</p>
       </div>
       <div className="text-right shrink-0">
-        <p className="text-green-400 font-bold text-sm">${alert.listing_price.toFixed(2)}</p>
-        <p className="text-xs text-yellow-400">-{alert.discount_percentage.toFixed(1)}%</p>
+        <p className="text-green-400 font-bold text-sm">${(alert.listing_price ?? 0).toFixed(2)}</p>
+        <p className="text-xs text-yellow-400">-{(alert.discount_percentage ?? 0).toFixed(1)}%</p>
       </div>
     </div>
   );
