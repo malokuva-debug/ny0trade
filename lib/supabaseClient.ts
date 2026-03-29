@@ -1,6 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Environment variables
 const supabaseUrl = process.env.SUPABASE_URL || '';
 const supabaseKey = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_KEY || '';
 
@@ -8,7 +7,6 @@ if (!supabaseUrl || !supabaseKey) {
   console.warn('Supabase credentials not found. Database features will be disabled.');
 }
 
-// Create Supabase client with service role key for backend operations
 export const supabase = createClient(supabaseUrl, supabaseKey, {
   auth: {
     autoRefreshToken: false,
@@ -30,11 +28,11 @@ export const supabaseHelpers = {
 
     const { data, error } = await query;
     if (error) throw error;
-    return data;
+    return data ?? [];
   },
 
   async createTradeUp(tradeup: any) {
-    const { data, error } = await supabase.from('tradeups').insert([tradeup]).select().single();
+    const { data, error } = await (supabase.from('tradeups') as any).insert([tradeup]).select().single();
     if (error) throw error;
     return data;
   },
@@ -48,11 +46,11 @@ export const supabaseHelpers = {
   async getVotesByTradeUpId(tradeupId: string) {
     const { data, error } = await supabase.from('votes').select('*').eq('tradeup_id', tradeupId);
     if (error) throw error;
-    return data;
+    return data ?? [];
   },
 
   async createVote(vote: { tradeup_id: string; user_id: string; vote_type: 'good' | 'bad' }) {
-    const { data, error } = await supabase.from('votes').insert([vote]).select().single();
+    const { data, error } = await (supabase.from('votes') as any).insert([vote]).select().single();
     if (error) throw error;
     return data;
   },
@@ -61,26 +59,26 @@ export const supabaseHelpers = {
     const votes = await this.getVotesByTradeUpId(tradeupId);
     return {
       good: votes.filter((v: any) => v.vote_type === 'good').length,
-      bad: votes.filter((v: any) => v.vote_type === 'bad').length,
+      bad:  votes.filter((v: any) => v.vote_type === 'bad').length,
     };
   },
 
   async savePriceHistory(priceData: any) {
-    const { data, error } = await supabase.from('price_history').insert([priceData]).select().single();
+    const { data, error } = await (supabase.from('price_history') as any).insert([priceData]).select().single();
     if (error) throw error;
     return data;
   },
 
   async getRecentPrices(skinName: string, hours = 24) {
-    const cutoffTime = new Date(Date.now() - hours * 60 * 60 * 1000).toISOString();
+    const cutoff = new Date(Date.now() - hours * 3600 * 1000).toISOString();
     const { data, error } = await supabase
       .from('price_history')
       .select('*')
       .eq('skin_name', skinName)
-      .gte('timestamp', cutoffTime)
+      .gte('timestamp', cutoff)
       .order('timestamp', { ascending: false });
     if (error) throw error;
-    return data;
+    return data ?? [];
   },
 
   async getSniperAlerts(onlyActive = true) {
@@ -88,25 +86,24 @@ export const supabaseHelpers = {
     if (onlyActive) query = query.eq('is_active', true);
     const { data, error } = await query;
     if (error) throw error;
-    return data;
+    return data ?? [];
   },
 
   async createSniperAlert(alert: any) {
-    const { data, error } = await supabase.from('sniper_alerts').insert([alert]).select().single();
+    const { data, error } = await (supabase.from('sniper_alerts') as any).insert([alert]).select().single();
     if (error) throw error;
     return data;
   },
 
   async deactivateSniperAlert(id: string) {
-    const { data, error } = await supabase
-      .from('sniper_alerts').update({ is_active: false }).eq('id', id).select().single();
+    const { data, error } = await supabase.from('sniper_alerts').update({ is_active: false }).eq('id', id).select().single();
     if (error) throw error;
     return data;
   },
 
   async cleanupOldPriceHistory(daysToKeep = 30) {
-    const cutoffDate = new Date(Date.now() - daysToKeep * 24 * 60 * 60 * 1000).toISOString();
-    const { error } = await supabase.from('price_history').delete().lt('timestamp', cutoffDate);
+    const cutoff = new Date(Date.now() - daysToKeep * 86400 * 1000).toISOString();
+    const { error } = await supabase.from('price_history').delete().lt('timestamp', cutoff);
     if (error) throw error;
   },
 };
