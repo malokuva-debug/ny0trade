@@ -25,7 +25,15 @@ export async function fetchCSFloatListings(marketHashName: string, limit = 20): 
     const response = await fetch(`${CSFLOAT_API_BASE}/listings?${params}`, { headers: getHeaders() });
     if (!response.ok) throw new Error(`CSFloat API error: ${response.status}`);
     const data = await response.json();
-    return data.listings || [];
+    return (data.listings || []).map((listing: any) => ({
+  ...listing,
+  price: Number(listing.price) || 0,
+  total_cost: Number(listing.total_cost) || 0,
+  expected_value: Number(listing.expected_value) || 0,
+  profit: Number(listing.profit) || 0,
+  avg_input_float: Number(listing.avg_input_float) || 0,
+  probability: Number(listing.probability) || 0, // for outputs
+}));
   } catch (error) {
     console.error('Error fetching CSFloat listings:', error);
     return [];
